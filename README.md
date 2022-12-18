@@ -1,6 +1,4 @@
-# Welcome to your CDK TypeScript project
-
-This is a blank project for CDK development with TypeScript.
+# Welcome to CDK with SAM TypeScript project
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
@@ -16,7 +14,9 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 ## How to init
 
 ### Install SAM
-https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html#install-sam-cli-instructions
+
+For the details see [link](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html#install-sam-cli-instructions)
+
 
 ➜  bin pwd
 /usr/local/bin
@@ -24,18 +24,34 @@ https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/i
 ➜  bin ll | grep sam
 lrwxr-xr-x    1 root      admin                   26 Dec 18 10:31 sam -> /usr/local/aws-sam-cli/sam
 
-➜  ~ sam --version
+```shell
+$ sam --version
+```
+Output:
+```text
 SAM CLI, version 1.66.0
+```
 
 ### Install CDK
-➜  cdk-sam cdk --version
+
+```shell
+$ cdk --version
+```
+
+Output:
+```text
 2.55.1 (build 30f1ae4)
+```
 
 ### Install gradle
-brew install gradle
 
-➜  cdk-sam git:(master) ✗ gradle -v
+```shell
+$ brew install gradle
+$ gradle -v
+```
 
+The output:
+```text
 Welcome to Gradle 7.6!
 
 Here are the highlights of this release:
@@ -58,28 +74,42 @@ Groovy:       3.0.13
 Ant:          Apache Ant(TM) version 1.10.11 compiled on July 10 2021
 JVM:          16.0.2 (Amazon.com Inc. 16.0.2+7)
 OS:           Mac OS X 12.6.1 x86_64
+```
 
 ### Create and init CDK resources
-mkdir cdk
-cd cdk
-cdk init app --language typescript
+
+```shell
+$ mkdir cdk
+$ cd cdk
+$ cdk init app --language typescript
+```
 
 ### Create and init Lambdas
-mkdir lambdas
-cd lambdas
-gradle init
+
+```shell
+$ mkdir lambdas
+$ cd lambdas
+$ gradle init
+```
 
 ### Build Lambdas
-➜  cdk-sam git:(master) ✗ ./build.sh build-kotlin
+
+```shell
+$ ./build.sh build-kotlin
+```
 
 ### Synthesize stacks
 cd cdk
 cdk synth
 
 ### Build with sam
-https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-cdk-building.html
-➜  cdk git:(master) ✗ sam build -t ./cdk.out/CdkStack.template.json
+More about [`sam build`](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-cdk-building.html)
 
+```shell
+$ sam build -t ./cdk.out/CdkStack.template.json
+```
+The output will be:
+```text
 Build Succeeded
 
 Built Artifacts  : .aws-sam/build
@@ -91,18 +121,27 @@ Commands you can use next
 [*] Invoke Function: sam local invoke
 [*] Test Function in the Cloud: sam sync --stack-name {{stack-name}} --watch
 [*] Deploy: sam deploy --guided
+```
 
 as a result you will have
 .aws-sam/build/template.yaml with all the SAM resources
 
 ### Generate event
-➜  cdk git:(master) ✗ sam local generate-event sqs receive-message
+```shell
+$ sam local generate-event sqs receive-message
+```
 
 ### Invoke locally
-sam local invoke CdkSamInputFunction -e events/receiveMessage.json
+For the details see the [link](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-cdk-testing.html)
 
-➜  cdk git:(master) ✗ sam local invoke CdkSamInputFunction -e events/receiveMessage.json
+```shell
+$ sam local invoke CdkSamInputFunction -e events/receiveMessage.json
+```
+
+## Troubleshooting
+
 Error: Running AWS SAM projects locally requires Docker. Have you got it installed and running?
+Run docker
 
 
 

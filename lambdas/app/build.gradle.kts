@@ -46,37 +46,5 @@ testing {
 }
 
 java {
-  targetCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_11
 }
-
-//tasks {
-//  shadowJar {
-//    include("*.jar")
-//    include("build.gradle.kts")
-//  }
-//}
-
-//jar {
-//  archiveFileName.set("twitter-bot-vue-3.jar")
-//  from(configurations
-//    .runtimeClasspath.get().files.filter { it.exists() }
-//    .map { if (it.isDirectory) it else zipTree(it) })
-//}
-
-//application {
-//    // Define the main class for the application.
-//    mainClass.set("cdk.sam.lambdas.AppKt")
-//}
-
-//tasks {
-//  named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
-//    archiveBaseName.set("lambdas-kotlin.jar")
-//  }
-
-//  jar {
-//    archiveFileName.set("lambdas-kotlin.jar")
-//    from(configurations
-//      .runtimeClasspath.get().files.filter { it.exists() }
-//      .map { if (it.isDirectory) it else zipTree(it) })
-//  }
-//}

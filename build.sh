@@ -2,13 +2,6 @@
 
 set -euo pipefail
 
-echo "User: $USER, account-id:$PERSONAL_AWS_ACCOUNT region: $PERSONAL_AWS_REGION"
-
-fix-ada() {
-    echo "Updating credentials, just to be sure..."
-    ada credentials update --account="${PERSONAL_AWS_ACCOUNT}" --provider=conduit --role=IibsAdminAccess-DO-NOT-DELETE --once
-}
-
 build-kotlin() {
   cd lambdas || exit
   echo "Removing previous build artefacts"
@@ -51,7 +44,6 @@ invoke() {
 }
 
 deploy() {
-  fix-ada
   echo "Deploying application..."
   cd ./cdk
   cdk bootstrap
@@ -61,8 +53,6 @@ deploy() {
 }
 
 destroy() {
-  fix-ada
-
   echo "Destroying application..."
   cd ./cdk
   cdk destroy --all --require-approval never
