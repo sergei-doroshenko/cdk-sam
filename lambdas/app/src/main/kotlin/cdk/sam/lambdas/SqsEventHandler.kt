@@ -10,5 +10,7 @@ class SqsEventHandler: RequestHandler<SQSEvent, Unit> {
     sqsEvent.records.forEach {
       println(it.body)
     }
+    val dynamoTableName = System.getenv("TABLE_NAME")
+    println("Dynamo table: $dynamoTableName")
   }
 }

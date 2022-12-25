@@ -6,7 +6,7 @@ build-kotlin() {
   echo "Building Kotlin lambdas..."
   cd lambdas || exit
   gradle clean makeDeploymentBundle
-  cd ../..
+  cd ..
 }
 
 build-stacks() {
