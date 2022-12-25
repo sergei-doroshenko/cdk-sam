@@ -129,6 +129,7 @@ as a result you will have
 ### Generate event
 ```shell
 $ sam local generate-event sqs receive-message
+$ sam local generate-event apigateway aws-proxy
 ```
 
 ### Invoke locally

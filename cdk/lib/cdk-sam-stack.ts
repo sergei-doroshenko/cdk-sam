@@ -1,4 +1,5 @@
 import {
+  aws_apigateway as ApiGateway,
   aws_dynamodb as Dynamo,
   aws_lambda as Lambda,
   aws_lambda_event_sources as LambdaEventSources,
@@ -16,8 +17,30 @@ export class CdkSamStack extends Stack {
     super(scope, id, props);
 
     const queue = new SQS.Queue(this, "CdkSamQueue", {
+      queueName: "CdkSamQueue",
       visibilityTimeout: Duration.seconds(300)
     });
+
+    const inputFunction = new Lambda.Function(this, "CdkSamInputFunction", {
+      functionName: "CdkSamInputFunction",
+      runtime: Lambda.Runtime.JAVA_11,
+      handler: "cdk.sam.lambdas.ApiEventHandler::handleRequest",
+      // lambdas/app/build/archives/lambda-deployment-bundle.zip
+      code: Lambda.Code.fromAsset(path.join("..", "lambdas", "app/build/archives/lambda-deployment-bundle.zip")),
+      environment: {
+        QUEUE_URL: queue.queueUrl
+      }
+    });
+
+    queue.grantSendMessages(inputFunction);
+
+    const api = new ApiGateway.LambdaRestApi(this, "input-api", {
+      handler: inputFunction,
+      proxy: false
+    });
+
+    const items = api.root.addResource("items");
+    items.addMethod("POST");
 
     const table = new Dynamo.Table(this, "ProcessingEventsTable", {
       tableName: "ProcessingEvents",
@@ -27,23 +50,22 @@ export class CdkSamStack extends Stack {
       removalPolicy: RemovalPolicy.DESTROY
     });
 
-    const fn = new Lambda.Function(this, "CdkSamInputFunction", {
-      functionName: "CdkSamInputFunction",
+    const computeFunction = new Lambda.Function(this, "CdkSamComputeFunction", {
+      functionName: "CdkSamComputeFunction",
       runtime: Lambda.Runtime.JAVA_11,
       handler: "cdk.sam.lambdas.SqsEventHandler::handleRequest",
-      // lambdas/app/build/archives/lambda-deployment-bundle.zip
       code: Lambda.Code.fromAsset(path.join("..", "lambdas", "app/build/archives/lambda-deployment-bundle.zip")),
       environment: {
         TABLE_NAME: table.tableName
       }
     });
 
-    queue.grantConsumeMessages(fn);
+    queue.grantConsumeMessages(computeFunction);
 
     const queueEventSource = new LambdaEventSources.SqsEventSource(queue);
 
-    fn.addEventSource(queueEventSource);
+    computeFunction.addEventSource(queueEventSource);
 
-    table.grantReadWriteData(fn);
+    table.grantReadWriteData(computeFunction);
   }
 }

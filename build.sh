@@ -26,8 +26,27 @@ build-all() {
 
 invoke() {
   cd cdk
-  sam local invoke CdkSamInputFunction -e events/receiveMessage.json
+  sam local invoke CdkSamInputFunction -e events/apiProxy.json
+#  sam local invoke CdkSamComputeFunction -e events/receiveMessage.json
   cd ..
+}
+
+logs() {
+  cd cdk
+  sam logs -n CdkSamInputFunction --stack-name CdkStack -t
+  cd ..
+}
+
+start-api() {
+  cd cdk
+  sam local start-api --warm-containers EAGER
+  cd ..
+}
+
+test-api() {
+  curl --location --request POST 'http://localhost:3000/items' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"text":"Hello from Api Gateway!"}'
 }
 
 deploy() {
