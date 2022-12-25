@@ -1,9 +1,7 @@
 import {
   aws_lambda as Lambda,
   aws_lambda_event_sources as LambdaEventSources,
-  aws_s3 as S3,
   aws_sqs as SQS, Duration,
-  RemovalPolicy,
   Stack,
   StackProps
 } from "aws-cdk-lib";
@@ -22,7 +20,8 @@ export class CdkSamStack extends Stack {
       functionName: "CdkSamInputFunction",
       runtime: Lambda.Runtime.JAVA_11,
       handler: "cdk.sam.lambdas.SqsEventHandler::handleRequest",
-      code: Lambda.Code.fromAsset(path.join("..", "lambdas", "lambdas-kotlin.zip"))
+      // lambdas/app/build/archives/lambda-deployment-bundle.zip
+      code: Lambda.Code.fromAsset(path.join("..", "lambdas", "app/build/archives/lambda-deployment-bundle.zip"))
     });
 
     queue.grantConsumeMessages(fn);

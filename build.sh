@@ -3,22 +3,9 @@
 set -euo pipefail
 
 build-kotlin() {
-  cd lambdas || exit
-  echo "Removing previous build artefacts"
-  rm -rf ./app/build/libs/*.jar
-  rm -rf ./*.zip
   echo "Building Kotlin lambdas..."
-  gradle shadowJar
-  echo "Coping artifacts..."
-  cd ./app
-  cp ./build/libs/app-all.jar ../lambdas-kotlin.zip
-  # To address the error:
-  # Error: Unable to find a supported build workflow for runtime 'java11'.
-  # Reason: None of the supported manifests '['build.gradle', 'build.gradle.kts', 'pom.xml']'
-  # were found in the following paths
-  # '['/Users/sddorosh/Documents/Personal/projects/cdk-sam/cdk/cdk.out/asset.309c94a99c94e0d748671f8e4085397a34ab9b4d3da76b020b551c0b0bf46406.jar',
-  # '/Users/sddorosh/Documents/Personal/projects/cdk-sam/cdk/cdk.out']'
-  zip ../lambdas-kotlin.zip ./build.gradle.kts
+  cd lambdas || exit
+  gradle clean makeDeploymentBundle
   cd ../..
 }
 
@@ -47,9 +34,10 @@ deploy() {
   echo "Deploying application..."
   cd ./cdk
   cdk bootstrap
-  local output=$(cdk deploy --require-approval never --all)
+  local output
+  output=$(cdk deploy --require-approval never --all)
   cd ..
-  echo $output
+  echo "$output"
 }
 
 destroy() {
