@@ -6,11 +6,6 @@
  * User Manual available at https://docs.gradle.org/7.6/userguide/building_java_projects.html
  * This project uses @Incubating APIs which are subject to change.
  */
-
-buildscript {
-
-}
-
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.7.10"
@@ -27,6 +22,7 @@ dependencies {
   implementation("com.google.guava:guava:31.1-jre")
   implementation("com.amazonaws:aws-lambda-java-core:1.2.2")
   implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
+  implementation("com.amazonaws:aws-java-sdk-dynamodb:1.12.372")
 }
 
 testing {

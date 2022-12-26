@@ -44,7 +44,7 @@ export class CdkSamStack extends Stack {
 
     const table = new Dynamo.Table(this, "ProcessingEventsTable", {
       tableName: "ProcessingEvents",
-      partitionKey: { name: "id", type: Dynamo.AttributeType.STRING },
+      partitionKey: { name: "Id", type: Dynamo.AttributeType.STRING },
       tableClass: Dynamo.TableClass.STANDARD_INFREQUENT_ACCESS,
       timeToLiveAttribute: "ttl",
       removalPolicy: RemovalPolicy.DESTROY
@@ -55,9 +55,11 @@ export class CdkSamStack extends Stack {
       runtime: Lambda.Runtime.JAVA_11,
       handler: "cdk.sam.lambdas.SqsEventHandler::handleRequest",
       code: Lambda.Code.fromAsset(path.join("..", "lambdas", "app/build/archives/lambda-deployment-bundle.zip")),
+      memorySize: 1024,
       environment: {
         TABLE_NAME: table.tableName
-      }
+      },
+      timeout: Duration.seconds(15)
     });
 
     queue.grantConsumeMessages(computeFunction);
