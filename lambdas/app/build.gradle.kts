@@ -25,8 +25,8 @@ repositories {
 dependencies {
     // This dependency is used by the application.
   implementation("com.google.guava:guava:31.1-jre")
-  implementation("com.amazonaws:aws-lambda-java-core:1.1.0")
-  implementation("com.amazonaws:aws-lambda-java-events:2.2.2")
+  implementation("com.amazonaws:aws-lambda-java-core:1.2.2")
+  implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
 }
 
 testing {
