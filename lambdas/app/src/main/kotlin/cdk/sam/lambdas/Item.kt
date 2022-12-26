@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable
 @DynamoDBTable(tableName="ProcessingEvents")
 class Item {
   @DynamoDBHashKey(attributeName="Id")
-  var id: Int = 1
+  var id: String = "1"
   @DynamoDBAttribute(attributeName="content")
-  var content: String = ""
+  var content: String = "DUMMY"
 }

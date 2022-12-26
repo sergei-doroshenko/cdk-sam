@@ -12,7 +12,7 @@ class ItemsHandler {
     mapper.save(item)
   }
 
-  fun get(id: Int) : List<Item> {
+  fun get(id: String) : List<Item> {
     val partitionKey = Item()
     partitionKey.id = id
     val queryExpression: DynamoDBQueryExpression<Item> =
